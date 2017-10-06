@@ -1,12 +1,13 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { _ } from 'meteor/underscore';
+import { Random } from 'meteor/random'
 
 
 Meteor.publish('simpleSearch', function(query) {
     var self = this;
-    var jsonStr =  JSON.stringify({
-        "size": 50,
+    var jsonStr =  {
+        "size": 30,
         "query": {
             "bool": {
                 "must": [
@@ -34,22 +35,22 @@ Meteor.publish('simpleSearch', function(query) {
                 }
             }
         }
-    });
+    };
     try {
         var response = HTTP.post('http://medialab.ufg.br:9200/_search', {
             headers: {'content-type': 'application/json','Accept': 'application/json'},
-            data: jsonStr 
+            data: jsonStr
         });
 
-        console.log('result',response);
-        // _.each(response.hits.hits, function(item) {
-        //     var doc = {
-        //         item:item,
-        //         total:response.hits.total
-        //     };
-        //
-        //     self.added('items', Random.id(), doc);
-        // });
+        response = JSON.parse(response.content);
+        _.each(response.hits.hits, function(item) {
+            var doc = {
+                item:item,
+                total:response.hits.hits.length
+            };
+
+            self.added('items', Random.id(), doc);
+        });
 
         self.ready();
 

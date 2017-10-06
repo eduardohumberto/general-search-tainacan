@@ -1,41 +1,43 @@
 <template name="ItemComponent">
-    <div class="item-colecao toggleSelect">
-        <div class="droppableClassifications">
+    <div class="col-md-offset-3 col-md-6 config_default_style">
+        <div class="item-colecao toggleSelect">
+            <div class="droppableClassifications">
 
-            <div class="row item-info">
-                <div class="col-md-4 colFoto">
-                    <a href="/" >
-                        {{#if Template.subscriptionsReady}}
-                            {{#with hasThumbnail}}
-                                <img src=""  alt="" class="attachment-thumbnail wp-post-image img-responsive" />
-                            {{else}}
-                                <div style="height:150px;" class="attachment-thumbnail wp-post-image tainacan-thumbless"></div>
-                            {{/with}}
-                        {{/if}}
-                    </a>
-                </div>
+                <div class="row item-info">
+                    <div class="col-md-4 colFoto">
+                        <a href="/" >
+                            {{#if Template.subscriptionsReady}}
+                                {{#with hasThumbnail}}
+                                    <img src=""  alt="" class="attachment-thumbnail wp-post-image img-responsive" />
+                                {{else}}
+                                    <div style="height:150px;" class="attachment-thumbnail wp-post-image tainacan-thumbless"></div>
+                                {{/with}}
+                            {{/if}}
+                        </a>
+                    </div>
 
-                <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
-                    <div class="item-meta col-md-12 no-padding">
-                        <h4 class="item-display-title">
-                            <a href="/{{slug}}">
-                                sdfsdfsdf
-                            </a>
-                        </h4>
-                        <div class="item-description"> sdfsdfsdfsdfsdf </div>
-                        <div class='item-desc-hidden-full' style="display: none"> {{description}}</div>
+                    <div class="col-md-8 flex-box item-meta-box" style="flex-direction:column;">
+                        <div class="item-meta col-md-12 no-padding">
+                            <h4 class="item-display-title">
+                                <a target="_blank" href="{{item._source.permalink}}">
+                                    {{item._source.post_title}}
+                                </a>
+                            </h4>
+                            <div class="item-description">  {{item._source.post_content}} </div>
+                            <div class='item-desc-hidden-full' style="display: none"> {{item._source.post_content}}</div>
 
-                        <div class="row author-created">
-                            <div class="col-md-6 author">
-                                <div class="item-author"><strong>{{_ 'singleListCollections.created-by'}}</strong>owner</div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="item-creation">data</div>
+                            <div class="row author-created">
+                                <div class="col-md-6 author">
+                                    <div class="item-author"><strong>{{_ 'singleListCollections.created-by'}}</strong>&nbsp;{{item._source.post_author.display_name}}</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="item-creation"> {{item._source.post_date}}</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
+                </div>
             </div>
         </div>
     </div>
