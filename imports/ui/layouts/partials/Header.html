@@ -1,0 +1,17 @@
+<template name="Header">
+  <nav  class="navbar navbar-default header-navbar"
+        style="background-color: {{#if isActivePath '/' }} none {{else}} black {{/if }} ;">
+            <div class="container-fluid">
+
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span>
+                </button>
+
+                <div class="navbar-header logo-container">
+                  <a class='navbar-brand logo-tainacan' href='/'>
+                    <img src="/Tainacan_pb.svg" width="150px"/>
+                  </a>
+                </div>
+            </div><!-- /.container-fluid -->
+        </nav>
+</template>

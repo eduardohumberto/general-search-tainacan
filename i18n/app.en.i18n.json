@@ -1,0 +1,36 @@
+{
+  "header": {
+    "title": "Read More",
+    "description": "Build up your reading list.",
+    "create-collection":"Create collection"
+  },
+  "front-page":{
+    "advanced-search" : "Advanced Search"
+  },
+  "collection":{
+    "create-collection":{
+        "submit-text":"Save",
+        "empty":"Collection name is empty"
+    },
+    "header-collection":{
+        "my-collections":"My collections",
+        "change-image":"Change image",
+        "change-cover":"Change cover"
+    },
+    "page-collection":{
+        "show":"Show",
+        "change-image":"Change image",
+        "cards":"Cards",
+        "table":"Table",
+        "map":"Map",
+        "sorted-by":"Sorted by",
+        "write-text":"Write text",
+        "send-file":"Send file",
+        "insert-url":"Insert URL"
+    }
+  },
+  "advanced-search": "Advanced Search",
+  "search":"Find",
+  "show":"Show",
+  "add":"Add"
+}
