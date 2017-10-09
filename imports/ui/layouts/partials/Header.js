@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { ReactiveVar } from 'meteor/reactive-var';
 import { ReactiveDict } from 'meteor/reactive-dict';
+import { Session} from 'meteor/session';
 
 import './Header.html';
 
@@ -20,8 +21,8 @@ Template.Header.helpers({
 
 
 Template.Header.events({
-    'click .js-open-modal': function () { 
-        $('#modalCreateCollection').modal('show');
+    'click .logo-tainacan': function () {
+        Session.set('query', '');
     },
     'click .login': function () {
         FlowRouter.go('entrar');

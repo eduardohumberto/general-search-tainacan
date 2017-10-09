@@ -1,0 +1,19 @@
+<template name="ListRepos">
+    <div class="col-md-12">
+        <h3>{{_ 'ListRepos.conected-repos'}}</h3>
+        <hr>
+        {{#each  repo in listRepositories }}
+            <div class="col-sm-6 col-md-4 ">
+                <a target="_blank" href="{{ repo.url}}" >
+                    <div class="thumbnail">
+                        <img src="{{repo.img}}" style="height: 120px;">
+                        <div class="caption">
+                            <h3>{{repo.title}}</h3>
+                            <p style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" >{{repo.text}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {{/each}}
+    </div>
+</template>

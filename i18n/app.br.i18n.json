@@ -6,7 +6,11 @@
   "front-page":{
     "find" : "Buscar itens...",
     "items-found-with-this-term":"itens encontrados com este termo",
-    "subtitle":"Busca em vários repositórios Tainacan"
+    "subtitle":"Busca em vários repositórios Tainacan",
+    "no-items-found":"Nenhum item encontrado com este termo"
+  },
+  "ListRepos":{
+     "conected-repos":"Repositórios conectados"
   },
   "ListItems":{
     "next":"Próximo",
