@@ -4,76 +4,15 @@
     "create-collection":"Criar coleção"
   },
   "front-page":{
-    "advanced-search" : "Busca avançada"
+    "find" : "Buscar itens...",
+    "items-found-with-this-term":"itens encontrados com este termo",
+    "subtitle":"Busca em vários repositórios Tainacan"
   },
-  "collection":{
-    "create-collection":{
-        "submit-text":"Enviar",
-        "empty":"Nome da coleção está vazio",
-        "name-exist":"Nome já existente"
-    },
-    "header-collection":{
-        "my-collections":"Minhas coleções",
-        "change-image":"alterar imagem",
-        "change-cover":"alterar capa"
-    },
-    "page-collection":{
-        "show":"Mostar",
-        "change-image":"alterar imagem",
-        "cards":"Cards",
-        "table":"Tabela",
-        "map":"Mapa",
-        "sorted-by":"Ordenado por",
-        "write-text":"Novo item",
-        "send-file":"Enviar arquivos",
-        "insert-url":"Inserir urls"
-    }
+  "ListItems":{
+    "next":"Próximo",
+    "previous":"Anterior"
   },
-  "Categories":{
-    "title":"Gerenciar categorias",
-    "back":"Voltar",
-    "set-as-parent":"Marcar como pai"
-  },
-  "formCategory":{
-     "field-label":{
-        "name":"Nome",
-        "parent":"Categoria pai",
-        "label-parent":"Nome do pai",
-        "description":"Descrição",
-        "privacity":"Privacidade",
-        "private":"Restrito",
-        "public":"Púlblico",
-        "moderators":"Moderadores"
-     }
-  },
-  "singleListCollections":{
+  "ItemComponent":{
     "created-by":"Criado por"
-  },
-  "itemActions":{
-     "editItem":"Editar Item"
-  },
-  "form-item":{
-     "add-item-title":"Adicionar Item",
-     "back-to-collection":"Voltar",
-     "expand-accordeon":"Expandir"
-  },
-  "Tools":{
-    "title":"Ferramentas",
-     "collections":"Coleções",
-     "metadataText-per-collection":"Metadados por coleção",
-     "items-per-collection":"Itens por coleção",
-     "clearRepository":"Limpar TODO repositrio"
-  },
-  "collections":"Todas as coleções",
-  "all-colections":"Todas as coleções",
-  "properties":"Metadados",
-  "advanced-search": "Busca avançada",
-  "search":"Buscar",
-  "show":"Mostrar",
-  "home":"Início",
-  "submit":"Enviar",
-  "close":"cancelar",
-  "add":"Adicionar",
-  "edit":"Editar",
-  "remove":"Remover"
+  }
 }

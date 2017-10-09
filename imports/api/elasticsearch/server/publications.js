@@ -3,11 +3,13 @@ import { HTTP } from 'meteor/http';
 import { _ } from 'meteor/underscore';
 import { Random } from 'meteor/random'
 
-
-Meteor.publish('simpleSearch', function(query) {
+Meteor.publish('simpleSearch', function(query,from,size) {
     var self = this;
+    from = (parseInt(from) === 1) ? 0 : ( ( parseInt(from) - 1) *  10) ;
+    size = (!size) ? 10 : size;
     var jsonStr =  {
-        "size": 30,
+        "from": from,
+        "size": size,
         "query": {
             "bool": {
                 "must": [
@@ -41,19 +43,17 @@ Meteor.publish('simpleSearch', function(query) {
             headers: {'content-type': 'application/json','Accept': 'application/json'},
             data: jsonStr
         });
-
         response = JSON.parse(response.content);
         _.each(response.hits.hits, function(item) {
             var doc = {
                 item:item,
-                total:response.hits.hits.length
+                total:response.hits.total,
+                page: from
             };
-
             self.added('items', Random.id(), doc);
         });
 
         self.ready();
-
     } catch(error) {
         console.log(error);
     }

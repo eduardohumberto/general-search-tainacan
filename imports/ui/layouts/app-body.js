@@ -5,7 +5,8 @@ import { ReactiveDict } from 'meteor/reactive-dict';
 import { Template } from 'meteor/templating';
 
 import './front-page/FrontPageLayout.js';
-import './front-page/ItemComponent.js';
+import './spinner/Spinner.js';
+import './items/';
 import './partials/Header.js';
 import './app-body.html';
 

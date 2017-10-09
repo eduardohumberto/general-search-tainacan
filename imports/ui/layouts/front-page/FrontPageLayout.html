@@ -7,7 +7,7 @@
                 <div class="project-info">
                   <center>
                       <h1> Tainacan </h1>
-                      <h3> Search </h3>
+                      <h3> {{_ 'front-page.subtitle'}} </h3>
                   </center>
                 </div>
                 <div id="searchBoxIndex" class="col-md-3 col-sm-12 center">
@@ -28,16 +28,38 @@
     </header>
     <section class="admin-configs" style=" padding-top: 20px;padding-botom: 20px;background: #f1f2f2;width: 100%;float: left;">
         {{#if searching }}
-            <p>{{_ 'Loading'}}</p>
+            {{>Spinner}}
         {{else}}
             {{#if items.count}}
-                {{#each item in items}}
-                    {{> ItemComponent item}}
-                {{/each}}
+                {{> ListItems items=items total=countItems }}
             {{else}}
+                {{#if didQuery}}
+                    <div class="col-md-12">
+                        <div class="alert alert-danger alert-dismissible" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                            <strong>Ops!</strong> {{_ 'front-page.no-items-found'}}
+                        </div>
+                    </div>
+                {{/if }}
                 <div class="col-md-12">
-                    <div class="col-md-12 config_default_style">
-                        <h4>{{_ 'front-page.find-total-items'}}</h4>
+                    <h3>Repositórios conectados</h3>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://bibflora.medialab.ufg.br/wp-content/uploads/2017/05/2017-04-27-09.18.06b-8.jpg" alt="...">
+                            <div class="caption">
+                                <h3>BibFlora</h3>
+                                <p>Recursos para estudos das plantas nativas brasileiras e das exóticas cultivadas / Acervo curado e mantido pelos membros do grupo Identificação de Plantas</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4">
+                        <div class="thumbnail">
+                            <img src="http://bibflora.medialab.ufg.br/wp-content/uploads/2017/05/2017-04-27-09.18.06b-8.jpg" alt="...">
+                            <div class="caption">
+                                <h3>BibFlora</h3>
+                                <p>Recursos para estudos das plantas nativas brasileiras e das exóticas cultivadas / Acervo curado e mantido pelos membros do grupo Identificação de Plantas</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             {{/if}}

@@ -1,0 +1,24 @@
+<template name="ListItems">
+    <div class="col-md-offset-3 col-md-6 config_default_style">
+        <h4><b>{{ countItems }} {{_ 'front-page.items-found-with-this-term'}}</b></h4>
+        {{#each item in items}}
+            {{> ItemComponent item}}
+        {{/each}}
+        <center>
+        <nav class="row">
+            <ul class="pager">
+                <li class="prevPageClass col-md-6">
+                    <a id="prevPage" href="javascript:void(0)"  class="btn btn-default" style="cursor: pointer;display:{{prevHasClass}};">
+                        <span aria-hidden="true">&larr;</span> {{_ 'ListItems.previous'}}
+                    </a>
+                </li>
+                <li class="nextPageClass col-md-6" >
+                    <a id="nextPage" href="javascript:void(0)" class="btn btn-default"  style="cursor: pointer;display:{{nextHasClass}};" >
+                        {{_ 'ListItems.next'}} <span aria-hidden="true">&rarr;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        </center>
+    </div>
+</template>
