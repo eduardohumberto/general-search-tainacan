@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { Template } from 'meteor/templating';
 import { Session} from 'meteor/session';
 import { Tracker } from 'meteor/tracker';
+import { _ } from 'meteor/underscore';
 
 import './FrontPageLayout.html';
 
@@ -20,7 +21,7 @@ Template.FrontPageLayout.onCreated(function(){
             Session.set('searching', ! searchHandle.ready());
             if (searchHandle.ready()) {
                 var item = items.findOne();
-                console.log(item,'ready');
+                //console.log(item,'ready');
             }
         }
     });
@@ -37,7 +38,14 @@ Template.FrontPageLayout.helpers({
         return Session.get('searching');
     },
     countItems: function() {
-        return Template.instance().items.find().fetch()[0].total;
+        var total = 0
+        _.each(Template.instance().items.find().fetch()[0].filters, function(filter) {
+            total+=filter.total
+        });
+        return total;
+    },
+    filters: function () {
+        return Template.instance().items.find().fetch()[0].filters;
     },
     didQuery:function(){
         return (Session.get('query')) ? true : false;

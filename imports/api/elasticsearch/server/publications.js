@@ -1,7 +1,9 @@
 import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { _ } from 'meteor/underscore';
-import { Random } from 'meteor/random'
+import { Random } from 'meteor/random';
+import { getFilters } from "../methods.js";
+
 
 Meteor.publish('simpleSearch', function(query,from,size) {
     var self = this;
@@ -16,6 +18,9 @@ Meteor.publish('simpleSearch', function(query,from,size) {
                     {"match": {"post_type": "object"}},
                     {"match": {"post_status": "publish"}}
                 ],
+                "must_not":[
+                    { "match":  {"post_parent" : 0 } }
+                ],
                 "filter": {
                     "bool": {
                         "must": [
@@ -26,7 +31,7 @@ Meteor.publish('simpleSearch', function(query,from,size) {
             }
         },
         "aggs": {
-            "types": {
+            "repositorios": {
                 "terms": {"field": "_index"},
                 "aggs": {
                     "collections": {
@@ -44,12 +49,18 @@ Meteor.publish('simpleSearch', function(query,from,size) {
             data: jsonStr
         });
         response = JSON.parse(response.content);
-        _.each(response.hits.hits, function(item) {
+        _.each(response.hits.hits, function(item,index) {
             var doc = {
                 item:item,
                 total:response.hits.total,
                 page: from
             };
+
+            //only in first item to search the filters
+            if(index===0 && response.aggregations){
+                doc.filters = getFilters(response.aggregations,query);
+            }
+
             self.added('items', Random.id(), doc);
         });
 
@@ -58,3 +69,4 @@ Meteor.publish('simpleSearch', function(query,from,size) {
         console.log(error);
     }
 });
+

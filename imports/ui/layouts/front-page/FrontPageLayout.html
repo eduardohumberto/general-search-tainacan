@@ -31,7 +31,7 @@
             {{>Spinner}}
         {{else}}
             {{#if items.count}}
-                {{> ListItems items=items total=countItems }}
+                {{> ListItems items=items total=countItems filters=filters}}
             {{else}}
                 {{#if didQuery}}
                     <div class="col-md-12">
