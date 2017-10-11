@@ -15,14 +15,14 @@ export var Apis = [
         text: 'Acervo Digital do Museu do Índio',
         index: 'mindiomedialabufgbr-1'
     },
-    {
+    /*{
         title:'Revista Filme Cultura',
         url: 'http://hmg.revista.cultura.gov.br',
         api:'http://hmg.revista.cultura.gov.br/wp-json/tainacan/v1',
         img:'http://hmg.revista.cultura.gov.br/wp-content/themes/tainacan-child/assets/images/banner.jpeg',
         text: 'A revista Filme Cultura é um espaço de divulgação, reflexão e debate sobre cinema brasileiro e tem uma história de mais de 50 anos, porém com pausas durante esse tempo.',
         index: 'hmgrevistaculturagovbr-1'
-    },
+    }, */
     {
         title:'Museu Arqueológico de Itaipú',
         url: 'https://dev.medialab.ufg.br/itaipu/',
@@ -31,12 +31,12 @@ export var Apis = [
         text: 'Museu de Arqueologia – Socioambiental de Itaipu',
         index:'devmedialabufgbritaipu-7'
     },
-    {
+   /* {
         title:'Repositório do Curso de Biblioteconomia – UFG',
         url: 'http://www.gi.fic.ufg.br/biblioteconomia',
         api:'http://www.gi.fic.ufg.br/biblioteconomia/wp-json/tainacan/v1',
         img:'http://www.gi.fic.ufg.br/biblioteconomia/wp-content/themes/tainacan/libraries/images/bg-home5.jpg',
         text: 'Referências do curso',
         index:'gificufgbrbiblioteconomia-41'
-    }
+    } */
 ];
