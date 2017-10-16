@@ -2,7 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { _ } from 'meteor/underscore';
 import { Random } from 'meteor/random';
-import { getFilters } from "../methods.js";
+import { getFilters,HOST } from "../methods.js";
 
 
 Meteor.publish('simpleSearch', function(query,from,size) {
@@ -16,10 +16,8 @@ Meteor.publish('simpleSearch', function(query,from,size) {
             "bool": {
                 "must": [
                     {"match": {"post_type": "object"}},
-                    {"match": {"post_status": "publish"}}
-                ],
-                "must_not":[
-                    { "match":  {"post_parent" : 0 } }
+                    {"match": {"post_status": "publish"}},
+                    { "match":  {"collection.post_status" : "publish" } }
                 ],
                 "filter": {
                     "bool": {
@@ -36,7 +34,7 @@ Meteor.publish('simpleSearch', function(query,from,size) {
                 "aggs": {
                     "collections": {
                         "terms": {
-                            "field": "post_parent"
+                            "field": "collection.ID"
                         }
                     }
                 }
@@ -44,7 +42,7 @@ Meteor.publish('simpleSearch', function(query,from,size) {
         }
     };
     try {
-        var response = HTTP.post('http://medialab.ufg.br:9200/_search', {
+        var response = HTTP.post(HOST+'/_search', {
             headers: {'content-type': 'application/json','Accept': 'application/json'},
             data: jsonStr
         });

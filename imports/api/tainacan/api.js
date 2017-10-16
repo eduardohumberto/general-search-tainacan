@@ -1,4 +1,4 @@
-export var Apis = [
+export var ApisExterna = [
     {
        title:'BibFlora',
        url: 'http://bibflora.medialab.ufg.br/',
@@ -39,4 +39,23 @@ export var Apis = [
         text: 'Referências do curso',
         index:'gificufgbrbiblioteconomia-41'
     } */
+];
+
+export var Apis = [
+    {
+        title:'tainacan-original',
+        url: 'http://localhost/wordpress/tainacan-original',
+        api:'http://localhost/wordpress/tainacan-original/wp-json/tainacan/v1',
+        img:'http://localhost/wordpress/tainacan-original/wp-content/themes/tainacan/libraries/images/bg-home5.jpg',
+        text: '',
+        index: 'localhostwordpresstainacanoriginal-21',
+    },
+    {
+        title:'Secretaria do AudioVisual',
+        url: 'http://localhost/wordpress/importa-api-5/',
+        api:'http://localhost/wordpress/importa-api-5/wp-json/tainacan/v1',
+        img:'http://localhost/wordpress/tainacan-original/wp-content/themes/tainacan/libraries/images/bg-home4.jpg',
+        text: 'Ministério da Cultura',
+        index:'localhostwordpressimportaapi5-16'
+    }
 ];
