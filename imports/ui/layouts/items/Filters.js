@@ -19,19 +19,19 @@ Template.Filters.helpers({
         _.each(collection.filtersCollection, function(object,type) {
             switch(type){
                 case 'post_title':
-                    metadata.push({label:TAPi18n.__('Title'),count:object.cont});
+                    metadata.push({label:TAPi18n.__('Title'),count:object.cont,key:object.key});
                     break;
                 case 'post_author':
-                    metadata.push( {label:TAPi18n.__('Author'),count:object.cont} );
+                    metadata.push( {label:TAPi18n.__('Author'),count:object.cont,key:object.key} );
                     break;
                 case 'post_content':
-                    metadata.push({label:TAPi18n.__('Description'),count:object.cont});
+                    metadata.push({label:TAPi18n.__('Description'),count:object.cont,key:object.key});
                     break;
                 case 'link':
-                    metadata.push({label:TAPi18n.__('Link'),count:object.cont});
+                    metadata.push({label:TAPi18n.__('Link'),count:object.cont,key:object.key});
                     break;
                 default:
-                    metadata.push({label:type,count:object.cont});
+                    metadata.push({label:type,count:object.cont,key:object.key});
                     break;
             }
         });
@@ -50,5 +50,34 @@ Template.Filters.events({
         var currentPage = parseInt(Session.get('page')) || 1;
         var nextPage = currentPage + 1;
         Session.set('page',nextPage);
+    },
+    'click .filter-repo':function(event){
+        Session.set('filters',
+            {
+                hasFilter:true,
+                repo:$(event.target).attr('repo'),
+                repoTitle:$(event.target).attr('repoTitle')
+            });
+    },
+    'click .filter-collection':function(){
+        Session.set('filters',
+            {
+                hasFilter:true,
+                repo:$(event.target).attr('repo'),
+                repoTitle:$(event.target).attr('repoTitle'),
+                collection:$(event.target).attr('collection'),
+                collectionTitle:$(event.target).attr('collectionTitle')
+            })
+    },
+    'click .filter-metadata':function(){
+        Session.set('filters',
+            {
+                hasFilter:true,
+                repo:$(event.target).attr('repo'),
+                repoTitle:$(event.target).attr('repoTitle'),
+                collection:$(event.target).attr('collection'),
+                collectionTitle:$(event.target).attr('collectionTitle'),
+                metadata: $(event.target).attr('metadata')
+            })
     }
 });

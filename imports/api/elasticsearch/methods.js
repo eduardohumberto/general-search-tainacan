@@ -2,6 +2,7 @@ import { Meteor } from 'meteor/meteor';
 import { _ } from 'meteor/underscore';
 import { Apis } from '../tainacan/api.js'
 import { HTTP } from 'meteor/http';
+import { Random } from 'meteor/random';
 
 export const HOST = 'http://192.168.99.100:9200';
 /*
@@ -196,4 +197,84 @@ const hasValue = function(string,value){
         }
     });
     return isMatch;
+}
+
+/**
+ * function that performs the search
+ *
+ * @param rootResponse
+ * @param classItem
+ * @param query
+ * @param from
+ * @param size
+ * @param filters
+ */
+export const filterSearch = function (rootResponse,classItem,query,from,size,filters) {
+
+    //alter host if necessary
+    var link = HOST;
+
+    //filter repository
+    if(filters.repo){
+        link+='/'+filters.repo;
+    }
+
+    //filter collection
+    var filterCollection = (filters.collection) ? { "match":  {"collection.ID" : parseInt(filters.collection) } } : { "match":  {"collection.post_status" : "publish" } };
+
+    //filter metadata
+    var filterMetadata =  {"match": {"_all": query}};
+    if(filters.metadata){
+        var object = {};
+        object[filters.metadata] = query;
+        filterMetadata =  JSON.stringify({match: object});
+    }
+
+
+    //JSON to perform the search
+    var jsonStr =  {
+        "from": from,
+        "size": size,
+        "query": {
+            "bool": {
+                "must": [
+                    {"match": {"post_type": "object"}},
+                    {"match": {"post_status": "publish"}},
+                    JSON.stringify(filterCollection)
+                ],
+                "filter": {
+                    "bool": {
+                        "must": [
+                            filterMetadata
+                        ]
+                    }
+                }
+            }
+        }
+    };
+
+    //query on elasticsearch with filters
+    var response = HTTP.post(link+'/_search', {
+        headers: {'content-type': 'application/json','Accept': 'application/json'},
+        data: jsonStr
+    });
+    console.log(jsonStr.query.bool.must,jsonStr.query.bool.filter);
+    //iterate with the results
+    _.each(response.hits.hits, function(item,index) {
+        //add the item on doc
+        var doc = {
+            item:item,
+            total:response.hits.total,
+            page: from
+        };
+
+        //only in first item to search the filters
+        if(index===0 && rootResponse.aggregations){
+            doc.filters = getFilters(rootResponse.aggregations,query);
+            doc.textFilter = filters;
+        }
+
+        //add on Collection for read in client side
+        classItem.added('items', Random.id(), doc);
+    });
 }

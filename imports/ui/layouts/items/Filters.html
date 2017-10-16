@@ -3,16 +3,18 @@
          <ul>
              {{#each filter in filters}}
                  <li>
-                     <a
-                             style="cursor: pointer;"
-                             class="filter-repo"
-                             repo="{{ filter.key }}">{{ filter.name }} - ({{filter.total}})</a>
+                     <a  style="cursor: pointer;"
+                         class="filter-repo"
+                         repoTitle="{{ filter.name }}"
+                         repo="{{ filter.key }}">{{ filter.name }} - ({{filter.total}})</a>
                      <ul>
                      {{#each collection in filter.collections}}
                          <li>
                              <a style="cursor: pointer;"
                                 class="filter-collection"
+                                repoTitle="{{ filter.name }}"
                                 repo="{{ filter.key }}"
+                                collectionTitle="{{ collection.name }}"
                                 collection="{{ collection.key }}">{{ collection.name }} - ({{collection.itemsFound}})</a>
                              <ul>
                                 {{#each metadata in (listType collection) }}
@@ -20,8 +22,10 @@
                                     <a style="cursor: pointer;"
                                        class="filter-metadata"
                                        repo="{{ filter.key }}"
+                                       repoTitle="{{ filter.name }}"
                                        collection="{{ collection.key }}"
-                                       metadata="" >{{ metadata.label }} - ({{metadata.count}})</a>
+                                       collectionTitle="{{ collection.name }}"
+                                       metadata="{{metadata.key}}" >{{ metadata.label }} - ({{metadata.count}})</a>
                                 </li>
                                 {{/each}}
                              </ul>

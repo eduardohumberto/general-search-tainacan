@@ -7,6 +7,7 @@ import { _ } from 'meteor/underscore';
 import './FrontPageLayout.html';
 
 Session.set('searching', false);
+Session.set('filters',{ hasFilter:false });
 Session.set('page', 1);
 
 Template.FrontPageLayout.onCreated(function(){
@@ -17,7 +18,7 @@ Template.FrontPageLayout.onCreated(function(){
     Tracker.autorun(function() {
         if (Session.get('query')) {
             //console.log(Session.get('query'),'created');
-            var searchHandle = Meteor.subscribe('simpleSearch', Session.get('query'),Session.get('page'));
+            var searchHandle = Meteor.subscribe('simpleSearch', Session.get('query'),Session.get('page'),10,Session.get('filters'));
             Session.set('searching', ! searchHandle.ready());
             if (searchHandle.ready()) {
                 var item = items.findOne();

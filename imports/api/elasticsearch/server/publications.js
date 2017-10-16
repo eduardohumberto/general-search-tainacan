@@ -2,10 +2,10 @@ import { Meteor } from 'meteor/meteor';
 import { HTTP } from 'meteor/http';
 import { _ } from 'meteor/underscore';
 import { Random } from 'meteor/random';
-import { getFilters,HOST } from "../methods.js";
+import { getFilters,HOST,filterSearch } from "../methods.js";
 
 
-Meteor.publish('simpleSearch', function(query,from,size) {
+Meteor.publish('simpleSearch', function(query,from,size,filters) {
     var self = this;
     from = (parseInt(from) === 1) ? 0 : ( ( parseInt(from) - 1) *  10) ;
     size = (!size) ? 10 : size;
@@ -42,29 +42,32 @@ Meteor.publish('simpleSearch', function(query,from,size) {
         }
     };
     try {
+
         var response = HTTP.post(HOST+'/_search', {
             headers: {'content-type': 'application/json','Accept': 'application/json'},
             data: jsonStr
         });
         response = JSON.parse(response.content);
-        _.each(response.hits.hits, function(item,index) {
-            var doc = {
-                item:item,
-                total:response.hits.total,
-                page: from
-            };
+        if(filters.hasFilter){
+            filterSearch(response,self,query,from,size,filters);
+        }else{
+            _.each(response.hits.hits, function(item,index) {
+                var doc = {
+                    item:item,
+                    total:response.hits.total,
+                    page: from
+                };
 
-            //only in first item to search the filters
-            if(index===0 && response.aggregations){
-                doc.filters = getFilters(response.aggregations,query);
-            }
+                //only in first item to search the filters
+                if(index===0 && response.aggregations){
+                    doc.filters = getFilters(response.aggregations,query);
+                }
 
-            self.added('items', Random.id(), doc);
-        });
-
+                self.added('items', Random.id(), doc);
+            });
+        }
         self.ready();
     } catch(error) {
         console.log(error);
     }
 });
-
