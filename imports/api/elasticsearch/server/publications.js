@@ -65,8 +65,9 @@ Meteor.publish('simpleSearch', function(query,from,size,filters) {
 
                 self.added('items', Random.id(), doc);
             });
+            self.ready();
         }
-        self.ready();
+
     } catch(error) {
         console.log(error);
     }

@@ -1,0 +1,39 @@
+html,body {
+    margin:0;
+    padding:0;
+    height:100%; /* needed for container min-height */
+    background:#f1f2f2;
+    font-family:arial,sans-serif;
+}
+
+
+.breadcrumb{
+    padding-left: 0px;
+}
+
+.filter-items{
+    margin-left: 15px;
+    margin-right: 15px;
+    background: white;
+    border: 3px solid #E8E8E8;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+
+.list-items{
+    padding: 15px;
+    background: white;
+    border: 3px solid #E8E8E8;
+    margin-bottom: 15px;
+}
+
+.filter-items li:before {
+    /*Using a Bootstrap glyphicon as the bullet point*/
+    content: "\e080";
+    font-family: 'Glyphicons Halflings';
+    font-size: 11px;
+    float: left;
+    margin-top: 4px;
+    margin-left: -17px;
+    color: #CCCCCC;
+}

@@ -1,7 +1,43 @@
 <template name="ListItems">
     {{>Filters }}
-    <div class="col-md-offset-1 col-md-6 config_default_style">
-        <h4><b>{{ countItems }} {{_ 'front-page.items-found-with-this-term'}}</b></h4>
+
+    <div class="col-md-8 list-items">
+        {{#if hasFilter}}
+        <ol class="breadcrumb">
+            <li><b><a style="cursor: pointer;"
+                      class="list-no-filters">{{_ 'Filters.filters'}}</a></b></li>
+            <li><b><a style="cursor: pointer;"
+                   class="list-filter-repo"
+                   repoTitle="{{textFilters.repoTitle }}"
+                      repo="{{textFilters.repo }}">{{textFilters.repoTitle }}</a></b></li>
+            {{#if textFilters.collectionTitle}}
+                <li><b><a style="cursor: pointer;"
+                       class="list-filter-collection"
+                       repoTitle="{{textFilters.repoTitle }}"
+                       repo="{{textFilters.repo }}"
+                       collectionTitle="{{ textFilters.collectionTitle }}"
+                       collection="{{ textFilters.collection }}">{{textFilters.collectionTitle }}</a></b></li>
+            {{/if}}
+            {{#if textFilters.metadata}}
+                <li><b><a style="cursor: pointer;"
+                          class="list-filter-metadata"
+                          repoTitle="{{textFilters.repoTitle }}"
+                          repo="{{textFilters.repo }}"
+                          collectionTitle="{{ textFilters.collectionTitle }}"
+                          collection="{{ textFilters.collection }}"
+                          metadata="{{ textFilters.metadata }}"
+                          metadataTitle="{{ textFilters.metadataTitle }}">{{ textFilters.metadataTitle }}</a></b></li>
+            {{/if}}
+            <li class="active"><b>{{ countItems }} {{_ 'front-page.items-found-with-this-term'}}</b></li>
+        </ol>
+        {{else}}
+        <ol class="breadcrumb">
+            <li><b><a style="cursor: pointer;"
+                      class="no-filters">{{_ 'Filters.filters'}}</a></b></li>
+           <li class="active"><b>{{ countItems }} {{_ 'front-page.items-found-with-this-term'}}</b></li>
+        </ol>
+        {{/if}}
+        <hr>
         {{#each item in items}}
             {{> ItemComponent item}}
         {{/each}}

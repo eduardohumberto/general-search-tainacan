@@ -102,8 +102,6 @@ const getItemsColletion = function(index,collection,query){
     });
     response = JSON.parse(response.content);
     var counters = verifyMatch(query,response.hits.hits);
-    //console.log('------');
-    //console.log(counters);
     return counters;
 }
 
@@ -111,19 +109,20 @@ const verifyMatch = function(query,items){
     var result ={
         title:{
             cont:0,
-            key:''
+            key:'post_title'
         },
         post_content:{
             cont:0,
-            key:''
+            key:'post_content'
         },
         post_author:{
             cont:0,
-            key:''
+            key:'post_author.raw'
         },
         link:{
-            cont:0,
-            key:''
+            key:'permalink',
+            cont:0
+
         },
         // terms:{
         //     cont:0
@@ -135,26 +134,22 @@ const verifyMatch = function(query,items){
                 case 'post_title':
                     if(hasValue(query,value)){
                         result.title.cont++;
-                        result.title.key = 'post_title';
                     }
                     break;
                 case 'post_content':
                     if(hasValue(query,value)){
                         result.post_content.cont++;
-                        result.post_content.key = 'post_content';
                     }
                     break;
                 case 'permalink':
                     if(hasValue(query,value)){
                         result.link.cont++;
-                        result.link.key = 'permalink';
                     }
                     break;
                 case 'post_author':
                     //console.log('author',value);
                     if(hasValue(query,value.display_name)||hasValue(query,value.raw)){
                         result.post_author.cont++;
-                        result.post_author.key = 'post_author';
                     }
                     break;
                 // case 'terms':
@@ -210,6 +205,7 @@ const hasValue = function(string,value){
  * @param filters
  */
 export const filterSearch = function (rootResponse,classItem,query,from,size,filters) {
+    console.log(filters);
 
     //alter host if necessary
     var link = HOST;
@@ -220,17 +216,15 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
     }
 
     //filter collection
-    var filterCollection = (filters.collection) ? { "match":  {"collection.ID" : parseInt(filters.collection) } } : { "match":  {"collection.post_status" : "publish" } };
+    var filterCollection = (filters.collection) ? { "match":  {"collection.ID" : parseInt(filters.collection) } } : { "match":  {'collection.post_status': 'publish' } };
 
     //filter metadata
     var filterMetadata =  {"match": {"_all": query}};
-    if(filters.metadata){
+    if(filters.metadata && filters.metadata !== ''){
         var object = {};
-        object[filters.metadata] = query;
-        filterMetadata =  JSON.stringify({match: object});
+        object[filters.metadata] = '*'+query+'*';
+        filterMetadata =  { "wildcard" : object} ;
     }
-
-
     //JSON to perform the search
     var jsonStr =  {
         "from": from,
@@ -238,9 +232,9 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
         "query": {
             "bool": {
                 "must": [
-                    {"match": {"post_type": "object"}},
-                    {"match": {"post_status": "publish"}},
-                    JSON.stringify(filterCollection)
+                    { "match": { "post_type": "object"}},
+                    { "match": { "post_status": "publish"}},
+                    filterCollection
                 ],
                 "filter": {
                     "bool": {
@@ -258,7 +252,12 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
         headers: {'content-type': 'application/json','Accept': 'application/json'},
         data: jsonStr
     });
-    console.log(jsonStr.query.bool.must,jsonStr.query.bool.filter);
+
+    //Extract the content
+    response = JSON.parse(response.content);
+
+
+    console.log(filterMetadata,filterCollection,response.hits.total);
     //iterate with the results
     _.each(response.hits.hits, function(item,index) {
         //add the item on doc
@@ -277,4 +276,5 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
         //add on Collection for read in client side
         classItem.added('items', Random.id(), doc);
     });
+    classItem.ready();
 }

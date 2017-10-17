@@ -17,6 +17,9 @@ Template.Filters.helpers({
     listType: function(collection){
         var metadata = [];
         _.each(collection.filtersCollection, function(object,type) {
+            if(object.cont==0)
+                return;
+
             switch(type){
                 case 'post_title':
                     metadata.push({label:TAPi18n.__('Title'),count:object.cont,key:object.key});
@@ -28,14 +31,13 @@ Template.Filters.helpers({
                     metadata.push({label:TAPi18n.__('Description'),count:object.cont,key:object.key});
                     break;
                 case 'link':
-                    metadata.push({label:TAPi18n.__('Link'),count:object.cont,key:object.key});
+                    metadata.push({label:TAPi18n.__('URL'),count:object.cont,key:object.key});
                     break;
                 default:
                     metadata.push({label:type,count:object.cont,key:object.key});
                     break;
             }
         });
-        console.log(metadata);
         return metadata;
     }
 });
@@ -52,6 +54,7 @@ Template.Filters.events({
         Session.set('page',nextPage);
     },
     'click .filter-repo':function(event){
+        Session.set('page',1);
         Session.set('filters',
             {
                 hasFilter:true,
@@ -60,6 +63,7 @@ Template.Filters.events({
             });
     },
     'click .filter-collection':function(){
+        Session.set('page',1);
         Session.set('filters',
             {
                 hasFilter:true,
@@ -70,6 +74,7 @@ Template.Filters.events({
             })
     },
     'click .filter-metadata':function(){
+        Session.set('page',1);
         Session.set('filters',
             {
                 hasFilter:true,
@@ -77,7 +82,12 @@ Template.Filters.events({
                 repoTitle:$(event.target).attr('repoTitle'),
                 collection:$(event.target).attr('collection'),
                 collectionTitle:$(event.target).attr('collectionTitle'),
-                metadata: $(event.target).attr('metadata')
+                metadata: $(event.target).attr('metadata'),
+                metadataTitle: $(event.target).attr('metadataTitle')
             })
+    },
+    'click .no-filters':function(){
+        Session.set('page',1);
+        Session.set('filters',{hasFilter:false})
     }
 });

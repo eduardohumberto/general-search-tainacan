@@ -18,5 +18,9 @@
   },
   "ItemComponent":{
     "created-by":"Criado por"
+  },
+  "Filters":{
+     "filters":"Filtros",
+     "all-items":"Todos os itens"
   }
 }

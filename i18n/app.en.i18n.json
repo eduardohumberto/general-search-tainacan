@@ -29,8 +29,7 @@
         "insert-url":"Insert URL"
     }
   },
-  "advanced-search": "Advanced Search",
-  "search":"Find",
-  "show":"Show",
-  "add":"Add"
+  "Filters":{
+    "filters":"Filters"
+  }
 }

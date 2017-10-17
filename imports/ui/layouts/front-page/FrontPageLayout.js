@@ -13,17 +13,15 @@ Session.set('page', 1);
 Template.FrontPageLayout.onCreated(function(){
     this.getRandomImage = new ReactiveVar(Math.floor((Math.random() * 5) + 1));
     this.items = new Mongo.Collection('items');
+    this.searchHandle = false;
+    var self = this
     var items = this.items;
 
     Tracker.autorun(function() {
         if (Session.get('query')) {
             //console.log(Session.get('query'),'created');
-            var searchHandle = Meteor.subscribe('simpleSearch', Session.get('query'),Session.get('page'),10,Session.get('filters'));
-            Session.set('searching', ! searchHandle.ready());
-            if (searchHandle.ready()) {
-                var item = items.findOne();
-                //console.log(item,'ready');
-            }
+            self.searchHandle = Meteor.subscribe('simpleSearch', Session.get('query'),Session.get('page'),10,Session.get('filters'));
+            Session.set('searching', ! self.searchHandle.ready());
         }
     });
 });
@@ -39,17 +37,33 @@ Template.FrontPageLayout.helpers({
         return Session.get('searching');
     },
     countItems: function() {
-        var total = 0
-        _.each(Template.instance().items.find().fetch()[0].filters, function(filter) {
-            total+=filter.total
-        });
+        var total = 0;
+        if(Template.instance().items.find().fetch()[0].textFilter){
+            total = Template.instance().items.find().fetch()[0].total;
+        }else{
+            _.each(Template.instance().items.find().fetch()[0].filters, function(filter) {
+                total+=filter.total
+            });
+        }
         return total;
     },
     filters: function () {
         return Template.instance().items.find().fetch()[0].filters;
     },
+    getSearchHandle:function(){
+        return Template.instance().searchHandle;
+    },
+    getTextFilters(){
+        return Template.instance().items.find().fetch()[0].textFilter;
+    },
     didQuery:function(){
-        return (Session.get('query')) ? true : false;
+        if(Session.get('query')){
+            Session.set('filters',{ hasFilter:false });
+            $('input[type=text]').val()
+            //Session.set('query', false);
+            return true;
+        }
+        return false;
     }
 });
 
@@ -59,6 +73,7 @@ Template.FrontPageLayout.events({
         var query = template.$('input[type=text]').val();
         if(Session.get('query') && query !== Session.get('query')){
             Session.set('page', 1);
+            Session.set('filters',{ hasFilter:false })
         }
         if (query)
             Session.set('query', query);

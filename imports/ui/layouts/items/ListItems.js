@@ -24,6 +24,14 @@ Template.ListItems.helpers({
             return 'none'
         else
             return 'block';
+    },
+    hasFilter:function(){
+        if( Template.instance().data.textFilters){
+            return true;
+        }else{
+            return false
+        }
+
     }
 });
 
@@ -37,5 +45,42 @@ Template.ListItems.events({
         var currentPage = parseInt(Session.get('page')) || 1;
         var nextPage = currentPage + 1;
         Session.set('page',nextPage);
+    },
+    'click .list-filter-repo':function(event){
+        Session.set('page',1);
+        Session.set('filters',
+            {
+                hasFilter:true,
+                repo:$(event.target).attr('repo'),
+                repoTitle:$(event.target).attr('repoTitle')
+            });
+    },
+    'click .list-filter-collection':function(){
+        Session.set('page',1);
+        Session.set('filters',
+            {
+                hasFilter:true,
+                repo:$(event.target).attr('repo'),
+                repoTitle:$(event.target).attr('repoTitle'),
+                collection:$(event.target).attr('collection'),
+                collectionTitle:$(event.target).attr('collectionTitle')
+            })
+    },
+    'click .list-filter-metadata':function(){
+        Session.set('page',1);
+        Session.set('filters',
+            {
+                hasFilter:true,
+                repo:$(event.target).attr('repo'),
+                repoTitle:$(event.target).attr('repoTitle'),
+                collection:$(event.target).attr('collection'),
+                collectionTitle:$(event.target).attr('collectionTitle'),
+                metadata: $(event.target).attr('metadata'),
+                metadataTitle: $(event.target).attr('metadataTitle')
+            })
+    },
+    'click .list-no-filters':function(){
+        Session.set('page',1);
+        Session.set('filters',{hasFilter:false})
     }
 });
