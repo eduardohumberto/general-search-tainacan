@@ -1,27 +1,27 @@
 <template name="Filters">
     <div class="col-md-3 filter-items">
         <ul>
-            <li>
-                 <a class="no-filters" style="cursor: pointer;">{{_ 'Filters.all-items'}}  ( {{ total }} )</a>
+            <li class="no-filter-line">
+                 <a class="no-filters" style="cursor: pointer;">{{_ 'Filters.all-items-in-this-search'}}</a>
                  <ul>
                      {{#each filter in filters}}
-                         <li>
+                         <li class="repo-filter-line">
                              <a  style="cursor: pointer;"
                                  class="filter-repo"
                                  repoTitle="{{ filter.name }}"
-                                 repo="{{ filter.key }}">{{ filter.name }} - ( {{filter.total}} )</a>
+                                 repo="{{ filter.key }}">{{ filter.name }} - (<strong>{{filter.total}}</strong>)</a>
                              <ul>
                              {{#each collection in filter.collections}}
-                                 <li>
+                                 <li class="collection-filter-line">
                                      <a style="cursor: pointer;"
                                         class="filter-collection"
                                         repoTitle="{{ filter.name }}"
                                         repo="{{ filter.key }}"
                                         collectionTitle="{{ collection.name }}"
-                                        collection="{{ collection.key }}">{{ collection.name }} - ( {{collection.itemsFound}} )</a>
+                                        collection="{{ collection.key }}">{{ collection.name }} - (<strong>{{collection.itemsFound}}</strong>)</a>
                                      <ul>
                                         {{#each metadata in (listType collection) }}
-                                        <li>
+                                        <li class="metadata-filter-line">
                                             <a style="cursor: pointer;"
                                                class="filter-metadata"
                                                repo="{{ filter.key }}"
@@ -29,7 +29,7 @@
                                                collection="{{ collection.key }}"
                                                collectionTitle="{{ collection.name }}"
                                                metadata="{{metadata.key}}"
-                                               metadataTitle="{{ metadata.label }}" >{{ metadata.label }} - ( {{metadata.count}} )</a>
+                                               metadataTitle="{{ metadata.label }}" >{{ metadata.label }} - (<strong>{{metadata.count}}</strong>)</a>
                                         </li>
                                         {{/each}}
                                      </ul>

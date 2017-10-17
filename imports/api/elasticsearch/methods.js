@@ -4,7 +4,7 @@ import { Apis } from '../tainacan/api.js'
 import { HTTP } from 'meteor/http';
 import { Random } from 'meteor/random';
 
-export const HOST = 'http://192.168.99.100:9200';
+export const HOST = 'http://medialab.ufg.br:9200';
 /*
   function that return filters
    repository (number)
@@ -229,6 +229,10 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
     var jsonStr =  {
         "from": from,
         "size": size,
+        "sort" : [
+            { "post_date" : {"order" : "desc"}},
+            "_score"
+        ],
         "query": {
             "bool": {
                 "must": [

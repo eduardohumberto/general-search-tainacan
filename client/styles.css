@@ -27,13 +27,47 @@ html,body {
     margin-bottom: 15px;
 }
 
-.filter-items li:before {
+.filter-items .no-filters:before {
+      /*Using a Bootstrap glyphicon as the bullet point*/
+      content: "\e135";
+      font-family: 'Glyphicons Halflings';
+      font-size: 11px;
+      float: left;
+      margin-top: 4px;
+      margin-left: -17px;
+      color: #5E5E5E;
+  }
+
+.filter-items .repo-filter-line:before {
     /*Using a Bootstrap glyphicon as the bullet point*/
-    content: "\e080";
+    content: "\e137";
     font-family: 'Glyphicons Halflings';
     font-size: 11px;
     float: left;
     margin-top: 4px;
     margin-left: -17px;
-    color: #CCCCCC;
+    color: #5E5E5E;
 }
+
+.filter-items .collection-filter-line:before {
+     /*Using a Bootstrap glyphicon as the bullet point*/
+     content: "\e117";
+     font-family: 'Glyphicons Halflings';
+     font-size: 11px;
+     float: left;
+     margin-top: 4px;
+     margin-left: -17px;
+     color: #5E5E5E;
+ }
+
+.filter-items .metadata-filter-line:before {
+    /*Using a Bootstrap glyphicon as the bullet point*/
+    content: "\e022";
+    font-family: 'Glyphicons Halflings';
+    font-size: 11px;
+    float: left;
+    margin-top: 4px;
+    margin-left: -17px;
+    color: #5E5E5E;
+}
+

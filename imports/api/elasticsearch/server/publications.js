@@ -12,6 +12,10 @@ Meteor.publish('simpleSearch', function(query,from,size,filters) {
     var jsonStr =  {
         "from": from,
         "size": size,
+        "sort" : [
+            { "post_date" : {"order" : "desc"}},
+            "_score"
+        ],
         "query": {
             "bool": {
                 "must": [

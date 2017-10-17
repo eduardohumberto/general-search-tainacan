@@ -26,12 +26,13 @@
                             <div class='item-desc-hidden-full' style="overflow: hidden;white-space: nowrap;text-overflow: ellipsis;margin-bottom: 10px;"> {{item._source.post_content}}</div>
                             <div class="row author-created">
                                 <div class="col-md-6 author">
-                                    <div class="item-author"><strong>{{_ 'ItemComponent.created-by'}}</strong>&nbsp;{{item._source.post_author.display_name}}</div>
+                                    <div class="item-author">{{_ 'ItemComponent.created-by'}}&nbsp;<strong>{{item._source.post_author.display_name}}</strong></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="item-creation"> {{item._source.post_date}}</div>
+                                    <div class="pull-right item-creation">{{_ 'ItemComponent.registred-date'}}&nbsp;<strong>{{ getDate item._source.post_date}}</strong></div>
                                 </div>
                             </div>
+                            {{>itemModal}}
                         </div>
                     </div>
 

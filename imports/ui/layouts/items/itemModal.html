@@ -1,0 +1,52 @@
+<template name="itemModal">
+    <div class="col-md-12" style="padding: 0px;margin-top: 10px;">
+        <a style="cursor: pointer;" data-toggle="modal" data-target="#modal-{{ item._source.post_id }}">
+           +&nbsp;{{_ 'itemModal.see-more'}}
+        </a>
+    </div>
+    <div class="modal fade" tabindex="-1" role="dialog" id="modal-{{ item._source.post_id }}">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">{{ item._source.post_title }}</h4>
+                </div>
+                <div class="modal-body" style="min-height: 300px;">
+                    <table class="table">
+                        <tbody>
+                          <tr>
+                              <td>{{_ 'Filters.Description' }}</td>
+                              <td>{{ item._source.post_content }}</td>
+                          </tr>
+                          <tr>
+                              <td>{{_ 'ItemComponent.created-by'}}</td>
+                              <td>{{item._source.post_author.display_name}}</td>
+                          </tr>
+                          <tr>
+                              <td>{{_ 'ItemComponent.registred-date'}}</td>
+                              <td>{{ getDate item._source.post_date}}</td>
+                          </tr>
+                          <tr>
+                              <td>{{_ 'Filters.URL' }}</td>
+                              <td><a href="{{item._source.permalink}}">{{ item._source.permalink}}</a></td>
+                          </tr>
+                        {{#each metadata in listMetadata }}
+                            <tr>
+                                <td>{{ metadata.metakey }}</td>
+                                <td>
+                                   {{#each value in metadata.values }}
+                                       {{ value }}<br>
+                                   {{/each}}
+                                </td>
+                            </tr>
+                        {{/each}}
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{_ 'itemModal.close'}}</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+</template>

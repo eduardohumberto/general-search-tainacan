@@ -7,7 +7,7 @@ import { TAPi18n } from 'meteor/tap:i18n';
 import './Filters.html';
 
 Template.Filters.onCreated(function(){
-   console.log(this.data,'template Filters');
+   console.log(this.data,'template Filters',TAPi18n.__('Filters.Title'));
 });
 
 Template.Filters.helpers({
@@ -22,16 +22,16 @@ Template.Filters.helpers({
 
             switch(type){
                 case 'post_title':
-                    metadata.push({label:TAPi18n.__('Title'),count:object.cont,key:object.key});
+                    metadata.push({label:TAPi18n.__('Filters.title-label'),count:object.cont,key:object.key});
                     break;
                 case 'post_author':
-                    metadata.push( {label:TAPi18n.__('Author'),count:object.cont,key:object.key} );
+                    metadata.push( {label:TAPi18n.__('Filters.Author'),count:object.cont,key:object.key} );
                     break;
                 case 'post_content':
-                    metadata.push({label:TAPi18n.__('Description'),count:object.cont,key:object.key});
+                    metadata.push({label:TAPi18n.__('Filters.Description'),count:object.cont,key:object.key});
                     break;
                 case 'link':
-                    metadata.push({label:TAPi18n.__('URL'),count:object.cont,key:object.key});
+                    metadata.push({label:TAPi18n.__('Filters.URL'),count:object.cont,key:object.key});
                     break;
                 default:
                     metadata.push({label:type,count:object.cont,key:object.key});
