@@ -194,7 +194,7 @@ const hasValue = function(string,value){
 }
 
 /**
- * function that performs the search
+ * function that performs the search specific
  *
  * @param rootResponse
  * @param classItem
@@ -266,6 +266,8 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
 
     //Extract the content
     response = JSON.parse(response.content);
+
+    //if nothing matches try other way
     if(response.hits.total === 0){
         response = alternateSearch(from,size,filterCollection,link,filters,query_origin);
     }
@@ -280,7 +282,6 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
             page: from
         };
 
-        
         if(item._source.collection)
             collections[item._source.collection.ID] = item._source.collection;
 
@@ -348,6 +349,10 @@ const alternateSearch = function(from,size,filterCollection,link,filters,query){
         data: jsonStr
     });
     //Extract the content
-    response = JSON.parse(response.content);console.log(filterMetadata,filterCollection,response.hits.total);
+    response = JSON.parse(response.content);
+
+    if(response.hits.total === 0)
+         console.log(filterMetadata,filterCollection,response.hits.total);
+    
     return response;
 }
