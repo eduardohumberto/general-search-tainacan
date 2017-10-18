@@ -38,6 +38,14 @@ export var Apis = [
         img:'http://www.gi.fic.ufg.br/biblioteconomia/wp-content/themes/tainacan/libraries/images/bg-home5.jpg',
         text: 'Referências do curso',
         index:'gificufgbrbiblioteconomia-41'
+    },
+    {
+        title:'Acervo da Cultura Afro Brasileira',
+        url: 'http://afro.culturadigital.br/',
+        api:'http://afro.culturadigital.br//wp-json/tainacan/v1',
+        img:'http://afro.culturadigital.br//wp-content/themes/tainacan/libraries/images/bg-home1.jpg',
+        text: 'MinC / UFG / UFPE',
+        index:'afroculturadigitalbr-1'
     }
 ];
 

@@ -10,14 +10,13 @@ export const HOST = 'http://medialab.ufg.br:9200';
    repository (number)
        collection (number)
 */
-export const getFilters = function(aggregations,query){
+export const getFilters = function(aggregations,query,collections){
     var filters = [];
     _.each(aggregations.repositorios.buckets, function(repo_items) {
         var result = {};
         var total = 0;
         //search for the data about the repo
         _.each(Apis, function(repo) {
-             //console.log(repo.index,repo_items.key,repo.index == repo_items.key);
              if(repo.index == repo_items.key){
                  result.name = repo.title;
                  result.itemsFound = repo_items.doc_count;
@@ -47,36 +46,33 @@ export const getFilters = function(aggregations,query){
                 total+=collection.doc_count;
                 result.collections.push(resultCollection);
                 result.total = total;
+            }else if(collections && collections[collection.key]){
+                var objectCollection = collections[collection.key];
+                var filtersCollection = getItemsColletion(repo_items.key,collection.key,query);
+                resultCollection.key = collection.key;
+                resultCollection.name = objectCollection.post_title;
+                resultCollection.itemsFound = collection.doc_count;
+                resultCollection.filtersCollection = filtersCollection;
+                total+=collection.doc_count;
+                result.collections.push(resultCollection);
+                result.total = total;
             }
 
         });
 
         //Add the repo info in a array
-        //console.log(result,'inserting repo');
-        filters.push(result);
+        if(result.collections.length > 0)
+            filters.push(result);
     });
 
     return filters;
 }
 
-//buscando os metadados da colecao na api do tainacan
-const getMetadata = function (api_url){
-    var array = [];
-    var response = HTTP.get(api_url);
-    response = JSON.parse(response.content);
-    if(response.length>0){
-        _.each(response,function(tab) {
-            _.each(tab["tab-properties"],function(property) {
-                array.push(property);
-            })
-        })
-    }
-    return array;
-}
 
 //buscando os itens da colecao
 const getItemsColletion = function(index,collection,query){
     var items = [];
+    var arg = (query.indexOf(' ')>=0) ? {"match": {"_all": query}} : {"wildcard": {"_all": "*"+query+"*"}}
     var jsonStr =  {
         "size": 10000,
         "query": {
@@ -89,7 +85,7 @@ const getItemsColletion = function(index,collection,query){
                 "filter": {
                     "bool": {
                         "must": [
-                            {"match": {"_all": query}}
+                            arg
                         ]
                     }
                 }
@@ -107,7 +103,7 @@ const getItemsColletion = function(index,collection,query){
 
 const verifyMatch = function(query,items){
     var result ={
-        title:{
+        post_title:{
             cont:0,
             key:'post_title'
         },
@@ -133,7 +129,7 @@ const verifyMatch = function(query,items){
             switch (index){
                 case 'post_title':
                     if(hasValue(query,value)){
-                        result.title.cont++;
+                        result.post_title.cont++;
                     }
                     break;
                 case 'post_content':
@@ -147,7 +143,6 @@ const verifyMatch = function(query,items){
                     }
                     break;
                 case 'post_author':
-                    //console.log('author',value);
                     if(hasValue(query,value.display_name)||hasValue(query,value.raw)){
                         result.post_author.cont++;
                     }
@@ -160,7 +155,11 @@ const verifyMatch = function(query,items){
                 //     });
                 //     break;
                 case 'post_meta':
+                    var block = ['socialdb_object_collection_init','socialdb_channel_id','socialdb_object_guid','socialdb_version_number'];
                     _.each(value, function(meta,meta_key) {
+                        if(block.indexOf(meta_key)>=0)
+                            return;
+
                         if(meta_key.indexOf('socialdb_property')<0) {
                             _.each(meta, function (val) {
                                 if (val && hasValue(query, val)) {
@@ -205,7 +204,8 @@ const hasValue = function(string,value){
  * @param filters
  */
 export const filterSearch = function (rootResponse,classItem,query,from,size,filters) {
-    console.log(filters);
+    var query_origin = query;
+    //console.log(filters);
 
     //alter host if necessary
     var link = HOST;
@@ -219,12 +219,19 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
     var filterCollection = (filters.collection) ? { "match":  {"collection.ID" : parseInt(filters.collection) } } : { "match":  {'collection.post_status': 'publish' } };
 
     //filter metadata
-    var filterMetadata =  {"match": {"_all": query}};
+    var arg = (query.indexOf(' ')>=0) ? {"match": {"_all": query}} : {"wildcard": {"_all": "*"+query+"*"}}
+    var filterMetadata =  arg;
     if(filters.metadata && filters.metadata !== ''){
         var object = {};
+        if(query.indexOf(' ')>=0){
+            var strings = query.split(' ');
+            query = strings[0];
+        }
+
         object[filters.metadata] = '*'+query+'*';
         filterMetadata =  { "wildcard" : object} ;
     }
+
     //JSON to perform the search
     var jsonStr =  {
         "from": from,
@@ -259,9 +266,11 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
 
     //Extract the content
     response = JSON.parse(response.content);
+    if(response.hits.total === 0){
+        response = alternateSearch(from,size,filterCollection,link,filters,query_origin);
+    }
 
-
-    console.log(filterMetadata,filterCollection,response.hits.total);
+    var collections = {};
     //iterate with the results
     _.each(response.hits.hits, function(item,index) {
         //add the item on doc
@@ -271,9 +280,13 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
             page: from
         };
 
+        
+        if(item._source.collection)
+            collections[item._source.collection.ID] = item._source.collection;
+
         //only in first item to search the filters
         if(index===0 && rootResponse.aggregations){
-            doc.filters = getFilters(rootResponse.aggregations,query);
+            doc.filters = getFilters(rootResponse.aggregations,query,collections);
             doc.textFilter = filters;
         }
 
@@ -281,4 +294,60 @@ export const filterSearch = function (rootResponse,classItem,query,from,size,fil
         classItem.added('items', Random.id(), doc);
     });
     classItem.ready();
+}
+
+/**
+ *
+ * @param from
+ * @param size
+ * @param filterCollection
+ * @param link
+ * @param filters
+ */
+const alternateSearch = function(from,size,filterCollection,link,filters,query){
+    //filter metadata
+    var filterMetadata =  {"match": {"_all": query}};
+    if(filters.metadata && filters.metadata !== ''){
+        var object = {};
+        if(query.indexOf(' ')>=0){
+            var strings = query.replace(' ',' OR ');
+            query = strings;
+        }
+        object['fields'] = [filters.metadata]
+        object['query'] = query;
+        filterMetadata =  { "query_string" : object} ;
+    }
+
+    var jsonStr =  {
+        "from": from,
+        "size": size,
+        "sort" : [
+            { "post_date" : {"order" : "desc"}},
+            "_score"
+        ],
+        "query": {
+            "bool": {
+                "must": [
+                    { "match": { "post_type": "object"}},
+                    { "match": { "post_status": "publish"}},
+                    filterCollection
+                ],
+                "filter": {
+                    "bool": {
+                        "must": [
+                            filterMetadata
+                        ]
+                    }
+                }
+            }
+        }
+    };
+
+    var response = HTTP.post(link+'/_search', {
+        headers: {'content-type': 'application/json','Accept': 'application/json'},
+        data: jsonStr
+    });
+    //Extract the content
+    response = JSON.parse(response.content);console.log(filterMetadata,filterCollection,response.hits.total);
+    return response;
 }

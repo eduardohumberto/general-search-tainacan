@@ -9,6 +9,7 @@ Meteor.publish('simpleSearch', function(query,from,size,filters) {
     var self = this;
     from = (parseInt(from) === 1) ? 0 : ( ( parseInt(from) - 1) *  10) ;
     size = (!size) ? 10 : size;
+    var arg = (query.indexOf(' ')>=0) ? {"match": {"_all": query}} : {"wildcard": {"_all": "*"+query+"*"}}
     var jsonStr =  {
         "from": from,
         "size": size,
@@ -26,7 +27,7 @@ Meteor.publish('simpleSearch', function(query,from,size,filters) {
                 "filter": {
                     "bool": {
                         "must": [
-                            {"match": {"_all": query}}
+                            arg
                         ]
                     }
                 }
@@ -55,6 +56,7 @@ Meteor.publish('simpleSearch', function(query,from,size,filters) {
         if(filters.hasFilter){
             filterSearch(response,self,query,from,size,filters);
         }else{
+            var collections = {};
             _.each(response.hits.hits, function(item,index) {
                 var doc = {
                     item:item,
@@ -62,16 +64,18 @@ Meteor.publish('simpleSearch', function(query,from,size,filters) {
                     page: from
                 };
 
+                if(item._source.collection)
+                    collections[item._source.collection.ID] = item._source.collection;
+
                 //only in first item to search the filters
                 if(index===0 && response.aggregations){
-                    doc.filters = getFilters(response.aggregations,query);
+                    doc.filters = getFilters(response.aggregations,query,collections);
                 }
 
                 self.added('items', Random.id(), doc);
             });
             self.ready();
         }
-
     } catch(error) {
         console.log(error);
     }

@@ -30,6 +30,14 @@
      "title-label":"Título",
      "Description":"Descrição",
      "URL":"URL",
-     "all-items-in-this-search":"Todos os itens nesta busca"
+     "all-items-in-this-search":"Todos os itens nesta busca",
+     "socialdb_object_dc_type":"Tipo",
+     "socialdb_object_from":"Tainacan origem",
+    "socialdb_version_number":"Número da versão",
+    "socialdb_version_date":"Data da versão",
+     "version-comment":"Comentário da versão",
+     "source":"Fonte",
+    "content":"Conteúdo do item",
+    "socialdb_uri_imported":"URL externa"
   }
 }
